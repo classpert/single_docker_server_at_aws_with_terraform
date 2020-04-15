@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+source keys/env
+
+ca_pem_path=keys/ca.pem
+cert_pem_path=keys/user-cert.pem
+key_path=keys/user-key.pem
+
+docker --tlsverify --tlscacert=$ca_pem_path --tlscert=$cert_pem_path --tlskey=$key_path -H=$REMOTE_DOMAIN:2376 $*

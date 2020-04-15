@@ -1,0 +1,81 @@
+# Docker Server at AWS EC2 using Terraform
+
+Just a very simple script to start a single EC2 instance
+
+
+## Setting this Up
+
+Just add those configurations at `keys/env`
+
+```
+AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
+AWS_DEFAULT_REGION=YOUR_AWS_DEFAULT_REGION
+REMOTE_DOMAIN=your.domain.here
+EMAIL=your.email@example.com
+```
+
+Then run:
+
+1. `make plan`
+2. `make apply`
+
+Just assing the public ip address at your `/etc/hosts`
+
+__... and that's all folks!__
+
+Everything is set in a secure way, so dockerd is configured and authenticated
+with certificates and keys automatically generated and available at `keys/`.
+
+By the way, to destroy completely this server run:
+
+```
+make destroy
+```
+
+## SSH to your Server
+
+You can connect via ssh to you server with:
+
+```
+ssh -i ./keys/developer_rsa ubuntu@your.domain.here
+```
+
+Or simpler:
+
+```
+./bin/ssh
+```
+
+## Run your Docker commands
+
+To run a command, like docker ps, do like it:
+
+```
+docker --tlsverify --tlscacert=./keys/ca.pem --tlscert=./keys/user-cert.pem --tlskey=./keys/user-key.pem -H=your.domain.here:2376 ps
+```
+
+Or simpler:
+
+```
+./bin/docker ps
+```
+
+Or better, configure you environment to connect by default to docker as
+described [here](https://docs.docker.com/engine/security/https/#secure-by-default)
+
+Or even better, use [Docker Machine](https://docs.docker.com/machine/overview/)
+
+## Bonus!
+
+These scripts are meant to be used as a quick fully functional remote docker
+server for development purposes, so why spending money on AWS when you are not
+using the server? Turn on and off your instances with `make start` and `make stop`.
+
+## Troubleshooting
+
+Maybe you will try to access some port on your server, and it will not be able to.
+
+Maybe you will need to edit [/security-group.tf](/security-group.tf) and open
+some ports there. This repository is meant to be a safe and simple clean start for
+those who want to debug their services securely by default.

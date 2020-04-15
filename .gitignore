@@ -1,0 +1,8 @@
+ssh/
+plans/
+keys/
+tmp/
+.terraform
+*.pem
+*.tfstate.backup
+*.tfstate

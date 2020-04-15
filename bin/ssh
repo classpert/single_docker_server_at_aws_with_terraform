@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+source keys/env
+
+ssh -i ./keys/developer_rsa ubuntu@$REMOTE_DOMAIN
